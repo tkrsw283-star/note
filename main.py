@@ -20,11 +20,18 @@ load_dotenv()
 
 def _get_client() -> anthropic.Anthropic:
     api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("❌ ANTHROPIC_API_KEY が設定されていません。")
-        print("   .env.example を参考に .env ファイルを作成してください。")
-        sys.exit(1)
-    return anthropic.Anthropic(api_key=api_key)
+    if api_key:
+        return anthropic.Anthropic(api_key=api_key)
+
+    # Claude Code sandbox 環境: session ingress token を Bearer 認証で使用
+    token_file = os.getenv("CLAUDE_SESSION_INGRESS_TOKEN_FILE")
+    if token_file and Path(token_file).exists():
+        auth_token = Path(token_file).read_text().strip()
+        return anthropic.Anthropic(auth_token=auth_token)
+
+    print("❌ ANTHROPIC_API_KEY が設定されていません。")
+    print("   .env.example を参考に .env ファイルを作成してください。")
+    sys.exit(1)
 
 
 def _do_research(client: anthropic.Anthropic) -> tuple[str, dict | None]:

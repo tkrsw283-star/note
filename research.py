@@ -54,8 +54,8 @@ def analyze_notes(notes: list[dict]) -> dict:
 
 
 def research_market(client: anthropic.Anthropic, api_data: Optional[dict] = None) -> str:
-    """Claude + Web検索でnote.com の市場インサイトを調査・分析"""
-    print("  🔍 Claude + Web検索で市場調査中...")
+    """Claude でnote.com の市場インサイトを調査・分析"""
+    print("  🔍 Claude で市場調査中...")
 
     api_context = ""
     if api_data:
@@ -72,8 +72,7 @@ def research_market(client: anthropic.Anthropic, api_data: Optional[dict] = None
         model="claude-opus-4-7",
         max_tokens=4000,
         thinking={"type": "adaptive"},
-        tools=[{"type": "web_search_20260209", "name": "web_search"}],
-        system="あなたはnoteプラットフォームの市場調査専門家です。Web検索で最新情報を収集し、「大学職員」ニッチにおいて実際に売れる有料記事を書くための実践的なインサイトをまとめてください。",
+        system="あなたはnoteプラットフォームの市場調査専門家です。あなたの知識をもとに「大学職員」ニッチにおいて実際に売れる有料記事を書くための実践的なインサイトをまとめてください。",
         messages=[{
             "role": "user",
             "content": f"""noteで「大学職員」をテーマにした有料記事の市場調査をお願いします。{api_context}
