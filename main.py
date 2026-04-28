@@ -14,6 +14,7 @@ import anthropic
 
 from research import fetch_trending_notes, analyze_notes, research_market
 from generate import generate_topic_ideas, generate_article, save_draft
+from eyecatch import generate_eyecatch
 
 load_dotenv()
 
@@ -110,9 +111,16 @@ def cmd_generate() -> None:
     filepath = save_draft(selected, content)
     print(f"  ✓ 保存完了: {filepath}")
 
+    # ── STEP 6: アイキャッチ生成 ────────────────────────────────
+    print("\n【STEP 5】アイキャッチ画像生成")
+    print("-" * 40)
+    eyecatch_path = generate_eyecatch(selected, filepath)
+    print(f"  ✓ 画像保存完了: {eyecatch_path}")
+
     print("\n" + "=" * 60)
     print("✅ 完了！下書きを確認して、投稿するか判断してください。")
     print(f"   📄 ファイル      : {filepath}")
+    print(f"   🖼️  アイキャッチ  : {eyecatch_path}")
     print(f"   💰 推奨価格      : {selected.get('price', 500)}円")
     print(f"   👥 ターゲット    : {selected.get('target', '—')}")
     print("=" * 60)
